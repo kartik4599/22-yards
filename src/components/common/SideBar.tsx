@@ -9,7 +9,13 @@ import {
 } from "lucide-react";
 import React from "react";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import { Button } from "../ui/button";
 import { BiSolidCricketBall } from "react-icons/bi";
 
@@ -18,12 +24,12 @@ const SideBarItems = () => {
     {
       label: "Dashboard",
       icon: Home,
-      href: "#",
+      href: "/",
     },
     {
       label: "Live Matches",
       icon: Clock,
-      href: "#",
+      href: "/live-match",
     },
     {
       label: "Previous Matches",
@@ -33,7 +39,7 @@ const SideBarItems = () => {
     {
       label: "My Teams",
       icon: Users,
-      href: "#",
+      href: "/team",
     },
     {
       label: "Tournaments",
@@ -74,10 +80,10 @@ export const MoblieSideBar = () => {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
-          <div className="flex items-center gap-2">
+          <SheetTitle className="flex items-center gap-2">
             <BiSolidCricketBall className="h-6 w-6" />
             <span className="text-xl font-bold tracking-tight">22 Yards</span>
-          </div>
+          </SheetTitle>
         </SheetHeader>
         <SideBarItems />
       </SheetContent>

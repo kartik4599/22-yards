@@ -13,7 +13,7 @@ import TeamTable from "../components/TeamTable";
 
 const DashboardPage = () => {
   return (
-    <main className="flex-1 p-4 md:p-6">
+    <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-4 md:gap-8">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
@@ -36,7 +36,6 @@ const DashboardPage = () => {
         </div>
         <StatsCards />
         <PlayerPerformance />
-
         {/* Team Rankings and Recent Matches */}
         <div className="grid gap-4 md:grid-cols-2">
           <TeamTable />

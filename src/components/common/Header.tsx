@@ -14,7 +14,7 @@ import { MoblieSideBar } from "./SideBar";
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/5 backdrop-blur-xs px-4 md:px-6">
       <MoblieSideBar />
       <div className="flex items-center gap-2">
         <BiSolidCricketBall className="h-6 w-6" />
