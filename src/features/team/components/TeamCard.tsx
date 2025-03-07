@@ -10,6 +10,7 @@ import { Team } from "../pages/TeamListPage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const TeamCard = ({ team }: { team: Team }) => {
   return (
@@ -46,7 +47,9 @@ const TeamCard = ({ team }: { team: Team }) => {
         </div>
       </CardContent>
       <CardFooter className="mt-auto">
-        <Button className="w-full">View Team</Button>
+        <Link href={`/team/${team.id}`} className="w-full">
+          <Button className="w-full">View Team</Button>
+        </Link>
       </CardFooter>
     </Card>
   );
