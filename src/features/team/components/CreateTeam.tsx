@@ -17,9 +17,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { getloggedInUser, pb } from "@/lib/database";
 import { useRouter } from "next/navigation";
-import { createTeam } from "../api/create-team";
+import { createTeam } from "../api/mutate-team";
 
 const formSchema = z.object({
   name: z.string().min(2, "Team name must be at least 2 characters"),
@@ -45,13 +44,9 @@ const CreateTeam = () => {
   const onSubmit = (data: FormValues) => {
     startTransition(async () => {
       try {
-        const { user } = getloggedInUser();
-        if (!user) return;
-
         const newTeam = await createTeam({
           name: data.name,
           shortName: data.shortName,
-          createdBy: user.id,
           logo: selectedFile,
         });
 
