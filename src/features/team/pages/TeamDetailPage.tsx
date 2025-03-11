@@ -1,6 +1,11 @@
+"use client";
+
+import { useEffect } from "react";
 import TeamHeader from "../components/TeamHeader";
 import TeamMatchs from "../components/TeamMatchs";
 import TeamPlayers from "../components/TeamPlayers";
+import { useParams } from "next/navigation";
+import useTeamDetail from "../hook/use-team-detail";
 
 export const team = {
   id: 1,
@@ -79,6 +84,19 @@ export const team = {
 };
 
 const TeamDetailPage = () => {
+  const { id } = useParams() as { id: string };
+  const { setTeam, setTeamMatchs } = useTeamDetail();
+
+  useEffect(() => {
+    setTeam(id);
+    setTeamMatchs(id);
+
+    () => {
+      setTeam();
+      setTeamMatchs();
+    };
+  }, [id]);
+
   return (
     <main className="flex-1 p-4 md:p-6">
       <div className="flex flex-col gap-6">

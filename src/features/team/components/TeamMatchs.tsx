@@ -8,9 +8,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { team } from "../pages/TeamDetailPage";
+import useTeamDetail from "../hook/use-team-detail";
+import TeamMatchsLoading from "./TeamMatchsLoading";
+import { format } from "date-fns";
 
 const TeamMatchs = () => {
+  const { previousMatches, upcomingMatches } = useTeamDetail();
+
+  if (!previousMatches || !upcomingMatches) return <TeamMatchsLoading />;
+
   return (
     <Card>
       <CardHeader>
@@ -32,11 +38,13 @@ const TeamMatchs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {team.previousMatches.map((match) => (
+                {previousMatches.map((match) => (
                   <TableRow key={match.id}>
-                    <TableCell>{match.date}</TableCell>
-                    <TableCell>{match.opponent}</TableCell>
-                    <TableCell>{match.result}</TableCell>
+                    <TableCell>
+                      {format(match.datetime, "dd-LL-yyyy")}
+                    </TableCell>
+                    <TableCell>{match.opponent.name}</TableCell>
+                    <TableCell>{match.verdict}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -52,11 +60,13 @@ const TeamMatchs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {team.upcomingMatches.map((match) => (
+                {upcomingMatches.map((match) => (
                   <TableRow key={match.id}>
-                    <TableCell>{match.date}</TableCell>
-                    <TableCell>{match.time}</TableCell>
-                    <TableCell>{match.opponent}</TableCell>
+                    <TableCell>
+                      {format(match.datetime, "dd-LL-yyyy")}
+                    </TableCell>
+                    <TableCell>{format(match.datetime, "h:mm a")}</TableCell>
+                    <TableCell>{match?.opponent?.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
