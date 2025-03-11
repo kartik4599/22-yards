@@ -1,7 +1,9 @@
 import PocketBase from "pocketbase";
 import { getCookie } from "cookies-next/client";
 
-export const pb = new PocketBase(process.env.DATABASE_URL);
+const url = process.env.DATABASE_URL || "http://127.0.0.1:8090/";
+
+export const pb = new PocketBase(url);
 
 export const getloggedInUser = (cookies?: string) => {
   const value = cookies || getCookie("pb_auth");
@@ -18,5 +20,5 @@ export const getImageUrl = ({
   id: string;
   filename: string;
 }) => {
-  return `${process.env.DATABASE_URL}/api/files/${collectionId}/${id}/${filename}`;
+  return `${url}/api/files/${collectionId}/${id}/${filename}`;
 };

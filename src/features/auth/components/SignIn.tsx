@@ -5,12 +5,18 @@ import { pb } from "@/lib/database";
 import { FcGoogle } from "react-icons/fc";
 import { setCookie } from "cookies-next/client";
 import { BiSolidCricketBall } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
+  const router = useRouter();
+
   const gooleHandler = async () => {
     try {
-      await pb.collection("users").authWithOAuth2({ provider: "google" });
+      await pb.collection("users").authWithOAuth2({
+        provider: "google",
+      });
       setCookie("pb_auth", pb.authStore.exportToCookie());
+      router.refresh();
     } catch (e) {
       console.log(e);
     }
