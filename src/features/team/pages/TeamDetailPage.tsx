@@ -91,7 +91,7 @@ const TeamDetailPage = () => {
     setTeam(id);
     setTeamMatchs(id);
 
-    () => {
+    return () => {
       setTeam();
       setTeamMatchs();
     };

@@ -82,7 +82,7 @@ export const getMatchInfo = async (
     { items: upcomingMatches },
   ] = await Promise.all([
     pb.collection("match").getList(1, 3, {
-      filter: `datetime < "${now}" && team1 = "${teamId}" || team2 = "${teamId}"`,
+      filter: `datetime < "${now}" && (team1 = "${teamId}" || team2 = "${teamId}")`,
       requestKey: "previousMatchs",
       expand: "team1,team2",
     }) as Promise<{ totalItems: number; items: MatchList[] }>,
@@ -91,7 +91,7 @@ export const getMatchInfo = async (
       requestKey: "totalWins",
     }),
     pb.collection("match").getList(1, 3, {
-      filter: `datetime > "${now}" && team1 = "${teamId}" || team2 = "${teamId}"`,
+      filter: `datetime > "${now}" && (team1 = "${teamId}" || team2 = "${teamId}")`,
       requestKey: "upcomingMatchs",
       expand: "team1,team2",
     }) as Promise<{ items: MatchList[] }>,

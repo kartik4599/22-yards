@@ -32,10 +32,14 @@ const useTeamDetail = create<{
       });
     }
 
-    const { previousMatches, totalMatchs, totalWins, upcomingMatches } =
-      await getMatchInfo(matchId);
+    const data = await getMatchInfo(matchId);
 
-    set({ previousMatches, totalMatchs, totalWins, upcomingMatches });
+    set({
+      previousMatches: data.previousMatches,
+      upcomingMatches: data.upcomingMatches,
+      totalMatchs: data.totalMatchs,
+      totalWins: data.totalWins,
+    });
   },
   isOwner: false,
   totalMatchs: 0,
