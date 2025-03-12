@@ -1,10 +1,6 @@
 import { create } from "zustand";
-import {
-  getMatchInfo,
-  getTeamBaiscInfo,
-  MatchList,
-  Team,
-} from "../api/get-team";
+import { getTeamBaiscInfo, Team } from "../api/fetch-team";
+import { getMatchInfo, MatchList } from "../api/fetch-match-team";
 
 const useTeamDetail = create<{
   team?: Team;

@@ -1,4 +1,4 @@
-import { getTeamList } from "../api/get-team";
+import { getTeamList } from "../api/fetch-team";
 import CreateTeam from "../components/CreateTeam";
 import TeamCard from "../components/TeamCard";
 

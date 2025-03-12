@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Team } from "../api/get-team";
+import { Team } from "../api/fetch-team";
 import { getImageUrl } from "@/lib/database";
 
 const TeamCard = ({ team }: { team: Team }) => {
