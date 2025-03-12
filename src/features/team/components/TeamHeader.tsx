@@ -9,8 +9,8 @@ const TeamHeader = () => {
   if (!team) return <TeamHeaderLoading />;
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col px-2 gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center justify-center sm:justify-start gap-4">
         <Avatar className="h-20 w-20">
           <AvatarImage
             src={getImageUrl({
@@ -27,7 +27,7 @@ const TeamHeader = () => {
           <p className="text-muted-foreground">Team ID: {team.shortName}</p>
         </div>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 justify-around sm:justify-start">
         <div className="text-center">
           <div className="text-2xl font-bold">
             {totalMatchs === 0

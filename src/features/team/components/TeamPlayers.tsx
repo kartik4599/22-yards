@@ -33,6 +33,7 @@ const TeamPlayers = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Role</TableHead>
+                <TableHead>Skill</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -59,9 +60,10 @@ const TeamPlayers = () => {
                     {player.expand.user.name}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={player.role ? "default" : "secondary"}>
-                      {player.role || player.skill}
-                    </Badge>
+                    <Badge>{player.role || "Player"}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={"secondary"}>{player.skill}</Badge>
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm">
