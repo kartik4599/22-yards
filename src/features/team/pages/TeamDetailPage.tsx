@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import TeamHeader from "../components/TeamHeader";
-import TeamMatchs from "../components/TeamMatchs";
-import TeamPlayers from "../components/TeamPlayers";
+import TeamMatchs from "../components/matchs/TeamMatchs";
 import { useParams } from "next/navigation";
 import useTeamDetail from "../hook/use-team-detail";
+import TeamHeader from "../components/header/TeamHeader";
+import TeamPlayers from "../components/players/TeamPlayers";
 
 export const team = {
   id: 1,

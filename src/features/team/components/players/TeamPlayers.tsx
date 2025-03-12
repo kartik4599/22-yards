@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AddPlayerDialog from "./AddPlayerDialog";
-import TeamPlayersLoading from "./TeamPlayersLoading";
-import useTeamDetail from "../hook/use-team-detail";
 import { getImageUrl } from "@/lib/database";
+import useTeamDetail from "../../hook/use-team-detail";
+import TeamPlayersLoading from "./TeamPlayersLoading";
+import AddPlayerDialog from "./AddPlayerDialog";
 
 const TeamPlayers = () => {
   const { players } = useTeamDetail();

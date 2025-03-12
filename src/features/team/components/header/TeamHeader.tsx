@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import useMatchDetail from "../hook/use-team-detail";
 import { getImageUrl } from "@/lib/database";
 import TeamHeaderLoading from "./TeamHeaderLoading";
+import useMatchDetail from "../../hook/use-team-detail";
 
 const TeamHeader = () => {
   const { team, totalWins, totalMatchs } = useMatchDetail();

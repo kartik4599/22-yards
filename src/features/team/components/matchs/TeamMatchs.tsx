@@ -8,9 +8,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useTeamDetail from "../hook/use-team-detail";
+import useTeamDetail from "../../hook/use-team-detail";
 import TeamMatchsLoading from "./TeamMatchsLoading";
 import { format } from "date-fns";
+import AddPlayerDialog from "../players/AddPlayerDialog";
 
 const TeamMatchs = () => {
   const { previousMatches, upcomingMatches } = useTeamDetail();
@@ -19,8 +20,9 @@ const TeamMatchs = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Matches</CardTitle>
+        <AddPlayerDialog />
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="previous">
