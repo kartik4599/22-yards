@@ -17,7 +17,7 @@ export interface Team {
   updated: string;
 }
 
-const getUser = async () => {
+export const getUser = async () => {
   const store = await cookies();
   const pb_auth = store.get("pb_auth");
   const { user } = getloggedInUser(pb_auth?.value);
