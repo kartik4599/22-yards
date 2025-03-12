@@ -85,15 +85,17 @@ export const team = {
 
 const TeamDetailPage = () => {
   const { id } = useParams() as { id: string };
-  const { setTeam, setTeamMatchs } = useTeamDetail();
+  const { setTeam, setTeamMatchs, setPlayers } = useTeamDetail();
 
   useEffect(() => {
     setTeam(id);
     setTeamMatchs(id);
+    setPlayers(id);
 
     return () => {
       setTeam();
       setTeamMatchs();
+      setPlayers();
     };
   }, [id]);
 

@@ -1,25 +1,30 @@
 import { create } from "zustand";
 import { getTeamBaiscInfo, Team } from "../api/fetch-team";
 import { getMatchInfo, MatchList } from "../api/fetch-match-team";
+import { getTeamsPlayers, Player } from "../api/fetch-player-team";
 
-const useTeamDetail = create<{
+interface useTeamDetailType {
   team?: Team;
   isOwner: boolean;
-  totalMatchs: number;
+  setTeam: (teamId?: string) => Promise<void>;
   totalWins: number;
-  setTeam: (matchId?: string) => Promise<void>;
-  setTeamMatchs: (matchId?: string) => Promise<void>;
+  totalMatchs: number;
   upcomingMatches?: MatchList[];
   previousMatches?: MatchList[];
-}>()((set) => ({
+  setTeamMatchs: (teamId?: string) => Promise<void>;
+  players?: Player[];
+  setPlayers: (teamId?: string) => Promise<void>;
+}
+
+const useTeamDetail = create<useTeamDetailType>()((set) => ({
   team: undefined,
-  setTeam: async (matchId) => {
-    if (!matchId) return set({ team: undefined, isOwner: false });
-    const { team, isOwner } = await getTeamBaiscInfo(matchId);
+  setTeam: async (teamId) => {
+    if (!teamId) return set({ team: undefined, isOwner: false });
+    const { team, isOwner } = await getTeamBaiscInfo(teamId);
     set({ team, isOwner });
   },
-  setTeamMatchs: async (matchId) => {
-    if (!matchId) {
+  setTeamMatchs: async (teamId) => {
+    if (!teamId) {
       return set({
         totalMatchs: 0,
         totalWins: 0,
@@ -28,7 +33,7 @@ const useTeamDetail = create<{
       });
     }
 
-    const data = await getMatchInfo(matchId);
+    const data = await getMatchInfo(teamId);
 
     set({
       previousMatches: data.previousMatches,
@@ -36,6 +41,11 @@ const useTeamDetail = create<{
       totalMatchs: data.totalMatchs,
       totalWins: data.totalWins,
     });
+  },
+  setPlayers: async (teamId) => {
+    if (!teamId) return set({ players: undefined });
+    const players = await getTeamsPlayers(teamId);
+    set({ players });
   },
   isOwner: false,
   totalMatchs: 0,

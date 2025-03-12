@@ -1,3 +1,5 @@
+"use server";
+
 import { getloggedInUser, pb } from "@/lib/database";
 
 export const createTeam = async (payload: {

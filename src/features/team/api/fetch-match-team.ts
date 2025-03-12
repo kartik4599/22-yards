@@ -1,3 +1,5 @@
+"use server";
+
 import { pb } from "@/lib/database";
 import { Team } from "./fetch-team";
 
