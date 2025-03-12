@@ -31,10 +31,19 @@ export interface User {
 
 export const getTeamsPlayers = async (teamId: string) => {
   const players = (await pb.collection("players").getFullList({
-    sort: "lastUpdate",
+    sort: "-lastUpdate",
     filter: `team = "${teamId}"`,
     expand: "user",
   })) as Player[];
 
   return players;
+};
+
+export const getUserList = async (keyword?: string) => {
+  let options: any = {};
+  if (keyword) options.filter = `name ~ "${keyword}"`;
+
+  const { items } = await pb.collection("users").getList(1, 5, options);
+
+  return items as User[];
 };
