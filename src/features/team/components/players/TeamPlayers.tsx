@@ -14,9 +14,13 @@ import { getImageUrl } from "@/lib/database";
 import useTeamDetail from "../../hook/use-team-detail";
 import TeamPlayersLoading from "./TeamPlayersLoading";
 import AddPlayerDialog from "./AddPlayerDialog";
+import { GrUpdate } from "react-icons/gr";
+import { MdOutlineDelete } from "react-icons/md";
+import useAddUpdatePlayer from "../../hook/use-mutate-player";
 
 const TeamPlayers = () => {
   const { players } = useTeamDetail();
+  const { setModal } = useAddUpdatePlayer();
 
   if (!players) return <TeamPlayersLoading />;
 
@@ -32,7 +36,9 @@ const TeamPlayers = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
+                <TableHead className="hidden sm:inline-flex items-center">
+                  Role
+                </TableHead>
                 <TableHead>Skill</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -59,15 +65,28 @@ const TeamPlayers = () => {
                     </Avatar>
                     {player.expand.user.name}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     <Badge>{player.role || "Player"}</Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant={"secondary"}>{player.skill}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="sm">
-                      Remove
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="group mr-2"
+                      onClick={setModal.bind(null, "update", player)}
+                    >
+                      <GrUpdate className="size-3 group-hover:text-blue-400" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="group"
+                      onClick={setModal.bind(null, "delete", player)}
+                    >
+                      <MdOutlineDelete className="size-4 text-red-400 group-hover:text-red-600" />
                     </Button>
                   </TableCell>
                 </TableRow>

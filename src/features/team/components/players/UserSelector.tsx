@@ -16,9 +16,11 @@ import { getImageUrl } from "@/lib/database";
 const UserSelector = ({
   setSelectedUser,
   selectedUser,
+  diable,
 }: {
   setSelectedUser: Dispatch<SetStateAction<User | null>>;
   selectedUser: User | null;
+  diable?: boolean;
 }) => {
   const [userlist, setUserList] = useState<User[]>([]);
   const [keyword, setKeyword] = useState("");
@@ -46,7 +48,7 @@ const UserSelector = ({
         <CommandList>
           <CommandGroup heading="Selected User">
             <CommandItem
-              onSelect={setSelectedUser.bind(null, null)}
+              onSelect={diable ? null : setSelectedUser.bind(null, null)}
               className="flex w-full justify-between items-center"
             >
               <div className="flex items-center gap-x-2">
@@ -61,7 +63,7 @@ const UserSelector = ({
                 </Avatar>
                 <span>{selectedUser.name}</span>
               </div>
-              <X />
+              {!diable && <X />}
             </CommandItem>
           </CommandGroup>
         </CommandList>

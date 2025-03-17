@@ -46,7 +46,9 @@ const TeamMatchs = () => {
                       {format(match.datetime, "dd-LL-yyyy")}
                     </TableCell>
                     <TableCell>{match.opponent.name}</TableCell>
-                    <TableCell>{match.verdict}</TableCell>
+                    <TableCell>
+                      {match.verdict || "Result not Declared"}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

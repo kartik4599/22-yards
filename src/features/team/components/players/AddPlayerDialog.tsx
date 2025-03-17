@@ -18,58 +18,105 @@ import {
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import UserSelector from "./UserSelector";
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { User } from "../../api/fetch-player-team";
 import useTeamDetail from "../../hook/use-team-detail";
-import { addPlayinTeam } from "../../api/mutate-player-team";
+import { addUpdatePlayerInTeam } from "../../api/mutate-player-team";
+import useAddUpdatePlayer from "../../hook/use-mutate-player";
 
 const AddPlayerDialog = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [role, setRole] = useState("Player");
   const [skill, setSkill] = useState("");
   const { team, setPlayers } = useTeamDetail();
-  const [dialogState, setDialogState] = useState(false);
+  const { state, setModal, player } = useAddUpdatePlayer();
   const [isLoading, startTransition] = useTransition();
 
   const submitHandler = () => {
     startTransition(async () => {
       if (!selectedUser || !skill || !team?.id) return;
-      await addPlayinTeam({
-        role,
-        skill,
-        userId: selectedUser.id,
-        teamId: team.id,
-      });
+      if (state === "delete") {
+      } else {
+        await addUpdatePlayerInTeam({
+          role,
+          skill,
+          userId: selectedUser.id,
+          teamId: team.id,
+          playerId: player?.id,
+        });
+      }
+
       await setPlayers(team.id);
-      setDialogState(false);
+      setModal("");
     });
   };
 
+  const headerAndDescription = useMemo(() => {
+    if (state === "add")
+      return {
+        header: "Add New Player",
+        description: "Enter the details of the new player.",
+        button: "Add Player",
+      };
+    if (state === "update")
+      return {
+        header: "Update Player",
+        description: "Update the details of the player.",
+        button: "Update Player",
+      };
+    if (state === "delete")
+      return {
+        header: "Delete Player",
+        description: "Are you sure you want to delete this player?",
+        button: "Delete Player",
+      };
+    return { header: "", description: "", button: "" };
+  }, [state]);
+
+  useEffect(() => {
+    if (!player) return;
+    setSelectedUser(player.expand.user);
+    setRole(player.role);
+    setSkill(player.skill);
+  }, [player]);
+
   return (
-    <Dialog open={dialogState} onOpenChange={setDialogState}>
+    <Dialog
+      open={!!state}
+      onOpenChange={(value) => {
+        if (value) return;
+        setModal("");
+      }}
+    >
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size="sm" onClick={() => setModal("add")}>
           <Plus className="mr-2 h-4 w-4" />
           Add Player
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Player</DialogTitle>
+          <DialogTitle>{headerAndDescription.header}</DialogTitle>
           <DialogDescription>
-            Enter the details of the new player.
+            {headerAndDescription.description}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <UserSelector
             selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
+            diable={state !== "add"}
           />
           <div className="flex items-center gap-4">
             <Label htmlFor="skill" className="text-right">
               Skill
             </Label>
-            <Select name="role" value={skill} onValueChange={setSkill}>
+            <Select
+              name="role"
+              value={skill}
+              onValueChange={setSkill}
+              disabled={state === "delete"}
+            >
               <SelectTrigger className="flex-1">
                 <SelectValue placeholder="Select a one skill" />
               </SelectTrigger>
@@ -85,7 +132,12 @@ const AddPlayerDialog = () => {
             <Label htmlFor="role" className="text-right">
               Role
             </Label>
-            <Select name="role" value={role} onValueChange={setRole}>
+            <Select
+              name="role"
+              value={role}
+              onValueChange={setRole}
+              disabled={state === "delete"}
+            >
               <SelectTrigger className="flex-1">
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
@@ -98,8 +150,11 @@ const AddPlayerDialog = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={submitHandler}>
-            {isLoading ? "Adding..." : "Add Player"}
+          <Button
+            onClick={submitHandler}
+            variant={state === "delete" ? "destructive" : "default"}
+          >
+            {isLoading ? "Loading..." : headerAndDescription.button}
           </Button>
         </DialogFooter>
       </DialogContent>
