@@ -107,8 +107,8 @@ const AddMatchDialog = () => {
                         variant="outline"
                         className="h-auto w-auto p-0 border-0"
                       >
-                        <div className="flex flex-col items-center w-40 p-4 border rounded-lg hover:bg-accent">
-                          <Avatar className="h-16 w-16 mb-2">
+                        <div className="flex flex-col items-center w-56 p-4 border rounded-lg hover:bg-accent">
+                          <Avatar className="md:size-32 size-20 mb-2">
                             <AvatarImage src={teamA.logo} alt={teamA.name} />
                             <AvatarFallback>{teamA.shortName}</AvatarFallback>
                           </Avatar>
@@ -153,8 +153,8 @@ const AddMatchDialog = () => {
                         variant="outline"
                         className="h-auto w-auto p-0 border-0"
                       >
-                        <div className="flex flex-col items-center w-40 p-4 border rounded-lg hover:bg-accent">
-                          <Avatar className="h-16 w-16 mb-2">
+                        <div className="flex flex-col items-center w-56 p-4 border rounded-lg hover:bg-accent">
+                          <Avatar className="md:size-32 size-20 mb-2">
                             <AvatarImage src={teamB.logo} alt={teamB.name} />
                             <AvatarFallback>{teamB.shortName}</AvatarFallback>
                           </Avatar>
