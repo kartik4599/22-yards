@@ -3,11 +3,12 @@
 import { pb } from "@/lib/database";
 import { getUser } from "./fetch-team";
 
-export const addPlayinTeam = async (payload: {
+export const addUpdatePlayerInTeam = async (payload: {
   userId: string;
   role: string;
   skill: string;
   teamId: string;
+  playerId?: string;
 }) => {
   try {
     const user = await getUser();
@@ -18,11 +19,36 @@ export const addPlayinTeam = async (payload: {
     if (team.createdBy !== user.id)
       throw new Error("You are not the owner of this team");
 
-    return await pb.collection("players").create({
-      user: payload.userId,
+    if (payload.role !== "Player") {
+      const {
+        items: [existingRole],
+      } = await pb.collection("players").getList(1, 1, {
+        filter: `team = "${payload.teamId}" && role="${payload.role}"`,
+      });
+
+      if (existingRole) {
+        await pb.collection("players").update(existingRole.id, {
+          role: "Player",
+        });
+      }
+    }
+
+    if (!payload.playerId) {
+      const newPlayer = await pb.collection("players").create({
+        user: payload.userId,
+        role: payload.role,
+        skill: payload.skill,
+        team: team.id,
+      });
+
+      return await pb.collection("team").update(payload.teamId, {
+        "+players": newPlayer.id,
+      });
+    }
+
+    return await pb.collection("players").update(payload.playerId, {
       role: payload.role,
       skill: payload.skill,
-      team: team.id,
     });
   } catch (e) {
     console.log(e);
