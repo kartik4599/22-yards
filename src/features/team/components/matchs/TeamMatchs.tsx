@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useTeamDetail from "../../hook/use-team-detail";
 import TeamMatchsLoading from "./TeamMatchsLoading";
 import { format } from "date-fns";
-import AddPlayerDialog from "../players/AddPlayerDialog";
+import AddMatchDialog from "./AddMatchDialog";
 
 const TeamMatchs = () => {
   const { previousMatches, upcomingMatches } = useTeamDetail();
@@ -22,7 +22,7 @@ const TeamMatchs = () => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Matches</CardTitle>
-        <AddPlayerDialog />
+        <AddMatchDialog />
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="previous">
