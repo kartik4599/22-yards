@@ -40,6 +40,11 @@ const TeamMatchs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                {previousMatches.length === 0 && (
+                  <TableRow>
+                    <TableCell>No previous matches</TableCell>
+                  </TableRow>
+                )}
                 {previousMatches.map((match) => (
                   <TableRow key={match.id}>
                     <TableCell>
@@ -64,6 +69,11 @@ const TeamMatchs = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                {upcomingMatches.length === 0 && (
+                  <TableRow>
+                    <TableCell>No upcoming matches</TableCell>
+                  </TableRow>
+                )}
                 {upcomingMatches.map((match) => (
                   <TableRow key={match.id}>
                     <TableCell>
