@@ -21,7 +21,10 @@ import UserSelector from "./UserSelector";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { User } from "../../api/fetch-player-team";
 import useTeamDetail from "../../hook/use-team-detail";
-import { addUpdatePlayerInTeam } from "../../api/mutate-player-team";
+import {
+  addUpdatePlayerInTeam,
+  deletePlayerFromTeam,
+} from "../../api/mutate-player-team";
 import useAddUpdatePlayer from "../../hook/use-mutate-player";
 
 const AddPlayerDialog = () => {
@@ -35,7 +38,8 @@ const AddPlayerDialog = () => {
   const submitHandler = () => {
     startTransition(async () => {
       if (!selectedUser || !skill || !team?.id) return;
-      if (state === "delete") {
+      if (state === "delete" && player?.id) {
+        await deletePlayerFromTeam(player.id);
       } else {
         await addUpdatePlayerInTeam({
           role,
