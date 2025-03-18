@@ -20,63 +20,59 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { format } from "date-fns";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllTeamList, getMyTeamList, Team } from "../../api/fetch-team";
+import { getImageUrl } from "@/lib/database";
+import { createMatch } from "../../api/mutate-player-match";
 
 const AddMatchDialog = () => {
+  const today = new Date();
+
   const [timeOption, setTimeOption] = useState("now");
+  const [myTeams, setMyTeams] = useState<Team[]>([]);
+  const [allTeams, setAllTeams] = useState<Team[]>([]);
 
-  // Sample teams data
-  const teams = [
-    {
-      id: 1,
-      name: "Mumbai Indians",
-      shortName: "MI",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 2,
-      name: "Chennai Super Kings",
-      shortName: "CSK",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 3,
-      name: "Royal Challengers Bangalore",
-      shortName: "RCB",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 4,
-      name: "Kolkata Knight Riders",
-      shortName: "KKR",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 5,
-      name: "Delhi Capitals",
-      shortName: "DC",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 6,
-      name: "Punjab Kings",
-      shortName: "PBKS",
-      logo: "/placeholder.svg?height=60&width=60",
-    },
-  ];
+  const [teamA, setTeamA] = useState<Team | null>(null);
+  const [teamB, setTeamB] = useState<Team | null>(null);
+  const [dateTime, setDateTime] = useState(format(today, "yyyy-MM-dd'T'HH:mm"));
 
-  const [teamA, setTeamA] = useState(teams[0]);
-  const [teamB, setTeamB] = useState(teams[1]);
-
-  // Function to change Team A
-  const changeTeamA = (teamId: number) => {
-    const newTeam = teams.find((team) => team.id === teamId);
-    if (newTeam && newTeam.id !== teamB.id) {
+  const changeTeamA = (teamId: string) => {
+    const newTeam = myTeams.find((team) => team.id === teamId);
+    if (newTeam && newTeam.id !== teamB?.id) {
       setTeamA(newTeam);
     }
   };
 
-  const today = new Date();
+  const changeTeamB = (teamId: string) => {
+    const newTeam = allTeams.find((team) => team.id === teamId);
+    if (newTeam && newTeam.id !== teamA?.id) {
+      setTeamB(newTeam);
+    }
+  };
+
+  const submitHandler = async () => {
+    if (!teamA?.id || !teamB?.id) return;
+    await createMatch({
+      teamAId: teamA?.id,
+      teamBId: teamB?.id,
+      date: new Date(dateTime).toISOString(),
+    });
+  };
+
+  useEffect(() => {
+    (async () => {
+      const [response1, response2] = await Promise.all([
+        getMyTeamList(),
+        getAllTeamList(),
+      ]);
+      setMyTeams(response1);
+      setAllTeams(response2);
+      setTeamA(response1[0]);
+      setTeamB(response2[1]);
+    })();
+  }, []);
+
+  if (!teamA || !teamB) return null;
 
   return (
     <Dialog>
@@ -109,7 +105,15 @@ const AddMatchDialog = () => {
                       >
                         <div className="flex flex-col items-center w-56 p-4 border rounded-lg hover:bg-accent">
                           <Avatar className="md:size-32 size-20 mb-2">
-                            <AvatarImage src={teamA.logo} alt={teamA.name} />
+                            <AvatarImage
+                              src={getImageUrl({
+                                collectionId: teamA.collectionId,
+                                filename: teamA.logo,
+                                id: teamA.id,
+                              })}
+                              className="object-cover"
+                              alt={teamA?.name}
+                            />
                             <AvatarFallback>{teamA.shortName}</AvatarFallback>
                           </Avatar>
                           <span className="text-sm font-medium truncate w-full">
@@ -120,7 +124,7 @@ const AddMatchDialog = () => {
                     </PopoverTrigger>
                     <PopoverContent className="p-2">
                       <div className="grid gap-2">
-                        {teams
+                        {myTeams
                           .filter((team) => team.id !== teamB.id)
                           .map((team) => (
                             <Button
@@ -155,7 +159,15 @@ const AddMatchDialog = () => {
                       >
                         <div className="flex flex-col items-center w-56 p-4 border rounded-lg hover:bg-accent">
                           <Avatar className="md:size-32 size-20 mb-2">
-                            <AvatarImage src={teamB.logo} alt={teamB.name} />
+                            <AvatarImage
+                              src={getImageUrl({
+                                collectionId: teamB.collectionId,
+                                filename: teamB.logo,
+                                id: teamB.id,
+                              })}
+                              className="object-cover"
+                              alt={teamB.name}
+                            />
                             <AvatarFallback>{teamB.shortName}</AvatarFallback>
                           </Avatar>
                           <span className="text-sm font-medium truncate w-full">
@@ -166,8 +178,8 @@ const AddMatchDialog = () => {
                     </PopoverTrigger>
                     <PopoverContent className="p-2">
                       <div className="grid gap-2">
-                        {teams
-                          .filter((team) => team.id !== teamB.id)
+                        {allTeams
+                          .filter((team) => team.id !== teamA.id)
                           .map((team) => (
                             <Button
                               key={team.id}
@@ -175,7 +187,7 @@ const AddMatchDialog = () => {
                                 team.id === teamA.id ? "secondary" : "ghost"
                               }
                               className="justify-start h-auto py-2"
-                              onClick={() => changeTeamA(team.id)}
+                              onClick={() => changeTeamB(team.id)}
                             >
                               <span className="text-xs">{team.name}</span>
                             </Button>
@@ -188,18 +200,15 @@ const AddMatchDialog = () => {
             </div>
           </div>
 
-          {/* Venue */}
-          <div className="space-y-2">
-            <Label htmlFor="venue">Venue</Label>
-            <Input placeholder="Add venue" />
-          </div>
-
           <div className="space-y-4">
             <Label>Match Time</Label>
             <RadioGroup
               defaultValue="now"
               className="flex items-center "
-              onValueChange={setTimeOption}
+              onValueChange={(value) => {
+                setTimeOption(value);
+                setDateTime(format(today, "yyyy-MM-dd'T'HH:mm"));
+              }}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="now" id="now" />
@@ -223,19 +232,19 @@ const AddMatchDialog = () => {
                   id="date"
                   className="w-fit"
                   min={format(today, "yyyy-MM-dd'T'HH:mm")}
-                  value={format(today, "yyyy-MM-dd'T'HH:mm")}
-                  onChange={(e) => console.log(e.target.value)}
+                  value={dateTime}
+                  onChange={(e) => setDateTime(e.target.value)}
                 />
               </div>
             )}
           </div>
-          <DialogFooter className="flex justify-between">
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button>Create Match</Button>
-          </DialogFooter>
         </div>
+        <DialogFooter className="flex justify-between">
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button onClick={submitHandler}>Create Match</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

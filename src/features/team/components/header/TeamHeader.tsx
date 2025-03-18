@@ -18,6 +18,7 @@ const TeamHeader = () => {
               id: team.id,
               filename: team.logo,
             })}
+            className="object-cover"
             alt={team.shortName}
           />
           <AvatarFallback>{team.shortName}</AvatarFallback>
