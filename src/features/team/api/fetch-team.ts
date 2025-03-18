@@ -29,7 +29,7 @@ export const getTeamList = async () => {
   const user = await getUser();
 
   let data = (await pb.collection("team").getFullList({
-    filter: `createdBy = "${user.id}" || players ?= "${user.id}"`,
+    filter: `createdBy = "${user.id}" || players.user ?= "${user.id}"`,
   })) as Team[];
 
   data = data.map((team) => ({
@@ -46,4 +46,23 @@ export const getTeamBaiscInfo = async (teamId: string) => {
   const isOwner = team.createdBy === user.id;
 
   return { team, isOwner };
+};
+
+export const getMyTeamList = async () => {
+  const user = await getUser();
+
+  let data = (await pb.collection("team").getFullList({
+    filter: `createdBy = "${user.id}"`,
+    requestKey: "myTeams",
+  })) as Team[];
+
+  return data;
+};
+
+export const getAllTeamList = async () => {
+  let data = (await pb.collection("team").getFullList({
+    requestKey: "allTeams",
+  })) as Team[];
+
+  return data;
 };
